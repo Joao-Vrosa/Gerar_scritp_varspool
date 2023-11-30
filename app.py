@@ -22,7 +22,7 @@ def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, p
         
         # Verificando se o contador ja existe
         while contador in comandos:
-            print(f'O {contador} ja existe')
+            print(f'[*] O {contador} ja existe, gerando um novo contador...')
             contador = random.randint(111111111, 999999999)
 
 
