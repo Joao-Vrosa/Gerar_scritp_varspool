@@ -1,5 +1,6 @@
 import random # Gerar números pseudoaleatórios
 from colorama import Fore, Style # Inserir cores no terminal
+from time import sleep
 
 
 def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs):
@@ -22,7 +23,7 @@ def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, p
         
         # Verificando se o contador ja existe
         while contador in comandos:
-            print(f'O {contador} ja existe')
+            print(f'[*] O {contador} ja existe, gerando um novo contador...')
             contador = random.randint(111111111, 999999999)
 
 
@@ -31,6 +32,21 @@ def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, p
         comandos.append(comando)
 
     return comandos
+
+
+def contador_segundo(tempo_total):
+    """
+    -> Funcao criada para gerar um contador dinamico, infomando o tempo restante da execucao da aplicacao.
+    return: Sem retorno
+    Criado por João V. Rosa
+    """
+    for segundos_restantes in range(tempo_total, 0, -1):
+        # divmod é usado para converter o tempo total em minutos e segundos, facilitando a formatação da saída
+        minutos, segundos = divmod(segundos_restantes, 60)
+        tempo_formatado = f'{minutos:02d}:{segundos:02d}'
+        # end="\r" é usada para reescrever a linha atual no terminal
+        print(f'{Fore.GREEN}Tempo restante: {Style.RESET_ALL}{tempo_formatado}', end="\r")
+        sleep(1)
 
 
 def dados():
@@ -53,6 +69,9 @@ def dados():
         for cmd in comandos_gerados:
             print(cmd)
         print("--------------------------------------------------------------------------")
+        
+        # Gerando um contador apos a geração dos scripts
+        contador_segundo(tempo_total=40)
         
     except ValueError as erro:
         print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
