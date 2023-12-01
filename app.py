@@ -45,7 +45,7 @@ def contador_segundo(tempo_total):
         minutos, segundos = divmod(segundos_restantes, 60)
         tempo_formatado = f'{minutos:02d}:{segundos:02d}'
         # end="\r" é usada para reescrever a linha atual no terminal
-        print(f'{Fore.GREEN}Tempo restante: {Style.RESET_ALL}{tempo_formatado}', end="\r")
+        print(f'{Fore.GREEN}Finalizando a execução em {Style.RESET_ALL}{tempo_formatado}', end="\r")
         sleep(1)
 
 
@@ -57,10 +57,10 @@ def dados():
     """
     try:
         print("\n---------------------------- DADOS DE ENTRADA ----------------------------")
-        arquivo_quarentena = input("Nome do arquivo: ")
-        nomenclatura_retorno = input("DSNAME de retorno: ")
-        id_caixa_retorno = int(input("ID cliente: "))
-        parametro_conect_vrs = input("Parâmetro Connect/RVS: ")
+        arquivo_quarentena = input("> Nome do arquivo: ")
+        nomenclatura_retorno = input("> DSNAME de retorno: ")
+        id_caixa_retorno = int(input("> ID cliente: "))
+        parametro_conect_vrs = input("> Parâmetro Connect/RVS: ")
         print("--------------------------------------------------------------------------")
 
         comandos_gerados = gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs)
@@ -68,10 +68,10 @@ def dados():
         print("\n\n\n---------------------------- COMANDOS GERADOS ----------------------------")
         for cmd in comandos_gerados:
             print(cmd)
-        print("--------------------------------------------------------------------------")
+        print("--------------------------------------------------------------------------\n")
         
         # Gerando um contador apos a geração dos scripts
-        contador_segundo(tempo_total=40)
+        contador_segundo(tempo_total=45)
         
     except ValueError as erro:
         print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
