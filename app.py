@@ -3,7 +3,7 @@ from colorama import Fore, Style # Inserir cores no terminal
 from time import sleep
 
 
-def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs):
+def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs, contadores_utilizados):
     """
     -> Esta fução recebe os parametros inseridos na função dados e gera os scripts.
     arquivo_quarentena: Nomenclatura do arquivos que está em quarentena;
@@ -18,18 +18,20 @@ def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, p
 
     comandos = []
 
+    # Gerando Contador
     for i in range(len(lista_arquivos)):
         contador = random.randint(111111111, 999999999)
         
         # Verificando se o contador ja existe
-        while contador in comandos:
-            print(f'[*] O {contador} ja existe, gerando um novo contador...')
+        while contador in contadores_utilizados:
+            print(f'{Fore.YELLOW}[ALERTA]{Style.RESET_ALL} O {contador} ja existe, gerando um novo contador...')
             contador = random.randint(111111111, 999999999)
-
 
         # Gerando o script
         comando = f'mv -v {lista_arquivos[i]} /var/spool/nexxera/skyline/recebe/ident/{lista_nomenclatura[i]}.{id_caixa_retorno}.T{contador}.{parametro_conect_vrs}'
         comandos.append(comando)
+        
+        contadores_utilizados.append(contador)
 
     return comandos
 
@@ -56,6 +58,8 @@ def dados():
     Criado por João V. Rosa
     """
     try:
+        contadores_utilizados = list()
+        
         print("\n---------------------------- DADOS DE ENTRADA ----------------------------")
         arquivo_quarentena = input("> Nome do arquivo: ")
         nomenclatura_retorno = input("> DSNAME de retorno: ")
@@ -63,7 +67,7 @@ def dados():
         parametro_conect_vrs = input("> Parâmetro Connect/RVS: ")
         print("--------------------------------------------------------------------------")
 
-        comandos_gerados = gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs)
+        comandos_gerados = gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs, contadores_utilizados)
 
         print("\n\n\n---------------------------- COMANDOS GERADOS ----------------------------")
         for cmd in comandos_gerados:
