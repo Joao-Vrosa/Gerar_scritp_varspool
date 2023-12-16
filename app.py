@@ -38,21 +38,6 @@ def gerar_comandos_varspool(arquivo_quarentena, nomenclatura_retorno, id_caixa_r
     return comandos
 
 
-def contador_segundo(tempo_total):
-    """
-    -> Funcao criada para gerar um contador dinamico, infomando o tempo restante da execucao da aplicacao.
-    return: Sem retorno
-    Criado por João V. Rosa
-    """
-    for segundos_restantes in range(tempo_total, 0, -1):
-        # divmod é usado para converter o tempo total em minutos e segundos, facilitando a formatação da saída
-        minutos, segundos = divmod(segundos_restantes, 60)
-        tempo_formatado = f'{minutos:02d}:{segundos:02d}'
-        # end="\r" é usada para reescrever a linha atual no terminal
-        print(f'{Fore.GREEN}Finalizando a execução em {Style.RESET_ALL}{tempo_formatado}', end="\r")
-        sleep(1)
-
-
 def dados_varspool():
     """
     -> Esta função recebe os dados de entrada e escreve a saida dos scripts na tela.
@@ -82,6 +67,22 @@ def dados_varspool():
     except ValueError as erro:
         print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
 
+
+# Contador dinamico
+
+def contador_segundo(tempo_total):
+    """
+    -> Funcao criada para gerar um contador dinamico, infomando o tempo restante da execucao da aplicacao.
+    return: Sem retorno
+    Criado por João V. Rosa
+    """
+    for segundos_restantes in range(tempo_total, 0, -1):
+        # divmod é usado para converter o tempo total em minutos e segundos, facilitando a formatação da saída
+        minutos, segundos = divmod(segundos_restantes, 60)
+        tempo_formatado = f'{minutos:02d}:{segundos:02d}'
+        # end="\r" é usada para reescrever a linha atual no terminal
+        print(f'{Fore.GREEN}Finalizando a execução em {Style.RESET_ALL}{tempo_formatado}', end="\r")
+        sleep(1)
 
 
 # JUDGE
@@ -136,6 +137,8 @@ def dados_judge():
         print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
 
 
+# Fluxo RET ou REM
+
 def escolher_fluxo():
     try:
         fluxo = int(input("> Escolha o fluxo desejado:\n\n[1] Fluxo de Retorno - var/spool\n[2] Fluxo de Remessa - JUDGE\n\n> Digite a opcao: "))
@@ -148,7 +151,6 @@ def escolher_fluxo():
         dados_judge()
     else:
         print(f'[ERRO] Opcao {fluxo} nao existe!')
-
 
 
 
