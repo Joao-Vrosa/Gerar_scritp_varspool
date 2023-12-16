@@ -1,9 +1,11 @@
-import random # Gerar números pseudoaleatórios
-from colorama import Fore, Style # Inserir cores no terminal
+import random  # Gerar números pseudoaleatórios
+from colorama import Fore, Style  # Inserir cores no terminal
 from time import sleep
 
 
-def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs, contadores_utilizados):
+# VARSPOOL
+
+def gerar_comandos_varspool(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs, contadores_utilizados):
     """
     -> Esta fução recebe os parametros inseridos na função dados e gera os scripts.
     arquivo_quarentena: Nomenclatura do arquivos que está em quarentena;
@@ -21,7 +23,7 @@ def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, p
     # Gerando Contador
     for i in range(len(lista_arquivos)):
         contador = random.randint(111111111, 999999999)
-        
+
         # Verificando se o contador ja existe
         while contador in contadores_utilizados:
             print(f'{Fore.YELLOW}[ALERTA]{Style.RESET_ALL} O {contador} ja existe, gerando um novo contador...')
@@ -30,7 +32,7 @@ def gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, p
         # Gerando o script
         comando = f'mv -v {lista_arquivos[i]} /var/spool/nexxera/skyline/recebe/ident/{lista_nomenclatura[i]}.{id_caixa_retorno}.T{contador}.{parametro_conect_vrs}'
         comandos.append(comando)
-        
+
         contadores_utilizados.append(contador)
 
     return comandos
@@ -51,7 +53,7 @@ def contador_segundo(tempo_total):
         sleep(1)
 
 
-def dados():
+def dados_varspool():
     """
     -> Esta função recebe os dados de entrada e escreve a saida dos scripts na tela.
     return: Sem retorno.
@@ -59,7 +61,7 @@ def dados():
     """
     try:
         contadores_utilizados = list()
-        
+
         print("\n---------------------------- DADOS DE ENTRADA ----------------------------")
         arquivo_quarentena = input("> Nome do arquivo: ")
         nomenclatura_retorno = input("> DSNAME de retorno: ")
@@ -67,19 +69,88 @@ def dados():
         parametro_conect_vrs = input("> Parâmetro Connect/RVS: ")
         print("--------------------------------------------------------------------------")
 
-        comandos_gerados = gerar_comandos(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs, contadores_utilizados)
+        comandos_gerados = gerar_comandos_varspool(arquivo_quarentena, nomenclatura_retorno, id_caixa_retorno, parametro_conect_vrs, contadores_utilizados)
 
         print("\n\n\n---------------------------- COMANDOS GERADOS ----------------------------")
         for cmd in comandos_gerados:
             print(cmd)
         print("--------------------------------------------------------------------------\n")
-        
+
         # Gerando um contador apos a geração dos scripts
         contador_segundo(tempo_total=45)
-        
+
     except ValueError as erro:
         print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
 
 
+
+# JUDGE
+
+def gerar_comandos_judge(caixa_cadastro, caixa_arquivo_rem, nomenclatura_arquivo, contadores_utilizados):
+    lista_arquivos = nomenclatura_arquivo.split(" ")
+
+    comandos = list()
+
+    # Gerando contador
+    for i in range(len(lista_arquivos)):
+        contador = random.randint(11111, 99999)
+
+        # Verificando se contador ja existe
+        while contador in contadores_utilizados:
+            print(f'{Fore.YELLOW}[ALERTA]{Style.RESET_ALL} O {contador} ja existe, gerando um novo contador...')
+            contador = random.randint(11111, 99999)
+
+        # Gerando Script
+        comando = f'$JUDGE_CMD $JUDGE_CFG {caixa_cadastro} ~/{caixa_arquivo_rem}/mailbox/{lista_arquivos[i]}.{contador}'
+        comandos.append(comando)
+
+    return comandos
+
+
+def dados_judge():
+    """
+    -> Esta função recebe os dados de entrada e escreve a saida dos scripts na tela.
+    return: Sem retorno.
+    Criado por João V. Rosa
+    """
+    contadores_utilizados = list()
+
+    try:
+        print("\n---------------------------- DADOS DE ENTRADA ----------------------------")
+        caixa_cadastro = input("Caixa postal cadastro: ")
+        caixa_arquivo_rem = input("Caixa arquivo remessa: ")
+        nomenclatura_arquivo = input("Nomenclatura arquivo: ")
+        print("--------------------------------------------------------------------------")
+
+        comandos_gerados = gerar_comandos_judge(caixa_cadastro, caixa_arquivo_rem, nomenclatura_arquivo, contadores_utilizados)
+
+        print("\n\n\n---------------------------- COMANDOS GERADOS ----------------------------")
+        for cmd in comandos_gerados:
+            print(cmd)
+        print("--------------------------------------------------------------------------\n")
+
+        # Gerando um contador apos a geração dos scripts
+        contador_segundo(tempo_total=45)
+
+    except ValueError as erro:
+        print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
+
+
+def escolher_fluxo():
+    try:
+        fluxo = int(input("> Escolha o fluxo desejado:\n\n[1] Fluxo de Retorno - var/spool\n[2] Fluxo de Remessa - JUDGE\n\n> Digite a opcao: "))
+    except ValueError as erro:
+        print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
+
+    if fluxo == 1:
+        dados_varspool()
+    elif fluxo == 2:
+        dados_judge()
+    else:
+        print(f'[ERRO] Opcao {fluxo} nao existe!')
+
+
+
+
 if __name__ == "__main__":
-    dados()
+    escolher_fluxo()
