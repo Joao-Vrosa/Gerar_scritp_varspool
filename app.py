@@ -1,6 +1,7 @@
 import random  # Gerar números pseudoaleatórios
 from colorama import Fore, Style  # Inserir cores no terminal
 from time import sleep
+import os
 
 
 # VARSPOOL
@@ -85,6 +86,16 @@ def contador_segundo(tempo_total):
         sleep(1)
 
 
+# Limpar a tela
+
+def limpa_tela():
+    sleep(3)
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+
 # JUDGE
 
 def gerar_comandos_judge(caixa_cadastro, caixa_arquivo_rem, nomenclatura_arquivo, contadores_utilizados):
@@ -141,16 +152,19 @@ def dados_judge():
 
 def escolher_fluxo():
     try:
-        fluxo = int(input("> Escolha o fluxo desejado:\n\n[1] Fluxo de Retorno - var/spool\n[2] Fluxo de Remessa - JUDGE\n\n> Digite a opcao: "))
+        fluxo = input("> Escolha o fluxo desejado:\n\n[1] Fluxo de Retorno - var/spool\n[2] Fluxo de Remessa - JUDGE\n\n> Digite a opcao: ")
+        while fluxo != "1" and fluxo != "2":
+            print(f'\n{Fore.RED}[ERRO] {Style.RESET_ALL}{Style.BRIGHT}Opcao invalida, tente novamente!{Style.RESET_ALL}')
+            limpa_tela()
+            fluxo = input("\n> Escolha o fluxo desejado:\n\n[1] Fluxo de Retorno - var/spool\n[2] Fluxo de Remessa - JUDGE\n\n> Digite a opcao: ")
+            
     except ValueError as erro:
         print(f'{Fore.RED}ERRO: {Style.RESET_ALL}{Style.BRIGHT}{erro}{Style.RESET_ALL}')
 
-    if fluxo == 1:
+    if fluxo == "1":
         dados_varspool()
-    elif fluxo == 2:
+    elif fluxo == "2":
         dados_judge()
-    else:
-        print(f'[ERRO] Opcao {fluxo} nao existe!')
 
 
 
