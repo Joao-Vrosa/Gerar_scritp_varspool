@@ -153,7 +153,7 @@ def dados_judge():
 def escolher_fluxo():
     try:
         fluxo = input("> Escolha o fluxo desejado:\n\n[ 1 ] Fluxo de Retorno - var/spool\n[ 2 ] Fluxo de Remessa - JUDGE\n\n> Digite a opcao: ")
-        while fluxo != "1" and fluxo != "2":
+        while fluxo not in {"1", "2"}:
             print(f'\n{Fore.RED}[ERRO] {Style.RESET_ALL}{Style.BRIGHT}Opcao invalida, tente novamente!{Style.RESET_ALL}')
             limpa_tela()
             fluxo = input("\n> Escolha o fluxo desejado:\n\n[1] Fluxo de Retorno - var/spool\n[2] Fluxo de Remessa - JUDGE\n\n> Digite a opcao: ")
